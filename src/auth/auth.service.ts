@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { randomBytes } from 'crypto';
+import { randomBytes, createHash } from 'crypto';
 import { hash, compare } from 'bcrypt';
 
 const TOKEN_BYTES = 256;
@@ -17,17 +17,24 @@ export class AuthService {
 
   async hashPw(pw: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      hash(pw, SALT_ROUNDS, (err, encrypted) => {
-        err ? reject(err) : resolve(encrypted);
-      });
+      hash(
+        createHash('sha1')
+          .update(pw)
+          .digest('hex'),
+        SALT_ROUNDS,
+        (err, encrypted) => {
+          err ? reject(err) : resolve(encrypted);
+        },
+      );
     });
   }
 
   async comparePw(pw: string, hashedPw: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      compare(pw, hashedPw, (err, bool) => {
-        err ? reject(err) : resolve(bool);
-      });
-    });
+    return compare(
+      createHash('sha1')
+        .update(pw)
+        .digest('hex'),
+      hashedPw,
+    );
   }
 }
