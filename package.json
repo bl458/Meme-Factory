@@ -6,19 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "run:local": "cross-env NODE_ENV=development LOAD_ENV=YES TYPEORM_ENTITIES=build/db/entity/**/*.js TYPEORM_MIGRATIONS=build/db/migration/**/*.js TYPEORM_SUBSCRIBERS=build/db/subscriber/**/*.js nest start --debug --watch"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",
