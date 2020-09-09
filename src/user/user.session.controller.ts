@@ -1,22 +1,25 @@
-import { Controller, Post, Body, Delete, Session } from '@nestjs/common';
+import { Controller, Post, Body, Delete, Param } from '@nestjs/common';
 
-import { UserSession } from 'src/db/entity/UserSession';
+import { UserSessionService } from './user.session.service';
 
 import { EmailPipe } from 'src/helper/pipes/EmailPipe';
 import { PasswordPipe } from 'src/helper/pipes/PasswordPipe';
+import { TokenPipe } from 'src/helper/pipes/TokenPipe';
 
 @Controller()
 export class UserSessionController {
+  constructor(private usService: UserSessionService) {}
+
   @Post('us')
   async login(
     @Body('email', new EmailPipe()) email: string,
     @Body('pw', new PasswordPipe()) pw: string,
   ): Promise<string> {
-    return;
+    return await this.usService.doLogin(email, pw);
   }
 
   @Delete('us')
-  async logout(@Session() us: UserSession): Promise<void> {
-    return;
+  async logout(@Param('token', new TokenPipe()) token: string): Promise<void> {
+    return await this.usService.doLogout(token);
   }
 }
