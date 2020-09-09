@@ -12,7 +12,7 @@ export class UserController {
   constructor(private uService: UserService) {}
 
   @Post('/user')
-  async newUser(
+  async signup(
     @Body('email', new EmailPipe()) email: string,
     @Body('pw', new PasswordPipe()) pw: string,
   ): Promise<User> {

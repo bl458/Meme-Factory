@@ -20,7 +20,7 @@ export class AuthService {
       hash(
         createHash('sha1')
           .update(pw)
-          .digest('hex'),
+          .digest('hex'), //Using sha1 ensures we are ok on bcrypt hash parameter length limit
         SALT_ROUNDS,
         (err, encrypted) => {
           err ? reject(err) : resolve(encrypted);
