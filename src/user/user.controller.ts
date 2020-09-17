@@ -11,7 +11,7 @@ import { PasswordPipe } from 'src/helper/pipes/PasswordPipe';
 export class UserController {
   constructor(private uService: UserService) {}
 
-  @Post('/user')
+  @Post('user')
   async signup(
     @Body('email', new EmailPipe()) email: string,
     @Body('pw', new PasswordPipe()) pw: string,

@@ -10,7 +10,7 @@ import { TokenPipe } from 'src/helper/pipes/TokenPipe';
 export class UserSessionController {
   constructor(private usService: UserSessionService) {}
 
-  @Post('us')
+  @Post('user/session')
   async login(
     @Body('email', new EmailPipe()) email: string,
     @Body('pw', new PasswordPipe()) pw: string,
@@ -18,7 +18,7 @@ export class UserSessionController {
     return await this.usService.doLogin(email, pw);
   }
 
-  @Delete('us')
+  @Delete('user/session')
   async logout(@Param('token', new TokenPipe()) token: string): Promise<void> {
     return await this.usService.doLogout(token);
   }
