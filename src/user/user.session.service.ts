@@ -15,7 +15,8 @@ export class UserSessionService {
       const user = await mgr.findOne(User, { email });
 
       if (!user) throw new BadRequestException('bad email');
-      if (!this.auth.comparePw(pw, user.pw))
+
+      if (!(await this.auth.comparePw(pw, user.pw)))
         throw new BadRequestException('bad pw');
 
       const uSession = new UserSession();
