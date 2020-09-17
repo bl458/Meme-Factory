@@ -19,9 +19,9 @@ export class UserSessionService {
         throw new BadRequestException('bad pw');
 
       const uSession = new UserSession();
-      uSession.user = user;
-
       const token = await this.auth.generateToken();
+
+      uSession.user = user;
       uSession.token = token;
 
       return token;
@@ -30,7 +30,10 @@ export class UserSessionService {
 
   async doLogout(token: string): Promise<void> {
     await this.conn.getConn().transaction(async mgr => {
-      const uSession = await mgr.findOne(UserSession, { token });
+      const uSession = await mgr.findOne(UserSession, {
+        select: ['id'],
+        where: { token },
+      });
 
       if (!uSession) throw new BadRequestException('invalid token');
 
