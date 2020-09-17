@@ -12,16 +12,16 @@ export class UserSessionService {
 
   async doLogin(email: string, pw: string): Promise<string> {
     return await this.conn.getConn().transaction(async mgr => {
-      let user = await mgr.findOne(User, { email });
+      const user = await mgr.findOne(User, { email });
 
       if (!user) throw new BadRequestException('bad email');
       if (!this.auth.comparePw(pw, user.pw))
         throw new BadRequestException('bad pw');
 
-      let uSession = new UserSession();
+      const uSession = new UserSession();
       uSession.user = user;
 
-      let token = await this.auth.generateToken();
+      const token = await this.auth.generateToken();
       uSession.token = token;
 
       return token;
@@ -30,7 +30,7 @@ export class UserSessionService {
 
   async doLogout(token: string): Promise<void> {
     await this.conn.getConn().transaction(async mgr => {
-      let uSession = await mgr.findOne(UserSession, { token });
+      const uSession = await mgr.findOne(UserSession, { token });
 
       if (!uSession) throw new BadRequestException('invalid token');
 

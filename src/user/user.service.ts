@@ -10,9 +10,9 @@ import { User } from 'src/db/entity/User';
 export class UserService {
   constructor(private conn: DBConnService, private auth: AuthService) {}
 
-  async createUser(email: string, pw: string) {
+  async createUser(email: string, pw: string): Promise<User> {
     return await this.conn.getConn().transaction(async mgr => {
-      let user = new User();
+      const user = new User();
       user.email = email;
       user.pw = await this.auth.hashPw(pw);
       user.images = [];
