@@ -18,7 +18,7 @@ export class UserSessionController {
     return await this.usService.doLogin(email, pw);
   }
 
-  @Delete('user/session')
+  @Delete('user/session/:token')
   async logout(@Param('token', TokenPipe) token: string): Promise<void> {
     return await this.usService.doLogout(token);
   }
