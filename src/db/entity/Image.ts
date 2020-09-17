@@ -22,12 +22,12 @@ export class Image {
   @Column({ nullable: false })
   url: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
   @ManyToOne(
     () => User,
     user => user.images,
   )
   user: User;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }

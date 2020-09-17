@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+} from 'typeorm';
 
 import { Image } from './Image';
 
@@ -18,4 +24,7 @@ export class User {
     image => image.user,
   )
   images: Image[];
+
+  @CreateDateColumn()
+  createdAt: Date;
 }

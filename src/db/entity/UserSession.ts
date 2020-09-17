@@ -4,6 +4,7 @@ import {
   Column,
   OneToOne,
   JoinColumn,
+  CreateDateColumn,
 } from 'typeorm';
 
 import { User } from './User';
@@ -19,4 +20,7 @@ export class UserSession {
   @OneToOne(() => User)
   @JoinColumn()
   user: User;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }
