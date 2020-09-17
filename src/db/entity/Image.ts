@@ -19,7 +19,7 @@ export class Image {
   @Column()
   height: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   url: string;
 
   @ManyToOne(
