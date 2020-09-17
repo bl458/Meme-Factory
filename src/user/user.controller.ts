@@ -13,8 +13,8 @@ export class UserController {
 
   @Post('user')
   async signup(
-    @Body('email', new EmailPipe()) email: string,
-    @Body('pw', new PasswordPipe()) pw: string,
+    @Body('email', EmailPipe) email: string,
+    @Body('pw', PasswordPipe) pw: string,
   ): Promise<User> {
     return await this.uService.createUser(email, pw);
   }

@@ -21,5 +21,7 @@ export class PasswordPipe implements PipeTransform {
 
     if (data.length < 8)
       throw new BadRequestException(`${data} must be a valid password.`);
+
+    return value;
   }
 }
