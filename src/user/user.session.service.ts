@@ -24,6 +24,8 @@ export class UserSessionService {
       uSession.user = user;
       uSession.token = token;
 
+      await mgr.save(uSession);
+
       return token;
     });
   }
