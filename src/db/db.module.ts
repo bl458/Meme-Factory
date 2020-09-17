@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { createConnection } from 'typeorm';
 
 import { DBConnService } from './db.conn.service';
 
+@Global()
 @Module({
   providers: [
     {

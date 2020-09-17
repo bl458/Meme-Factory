@@ -5,11 +5,11 @@ import { Connection } from 'typeorm';
 export class DBConnService {
   public constructor(private conn: Connection) {}
 
-  getConn(): Connection {
+  public getConn(): Connection {
     return this.conn;
   }
 
-  closeConn(): Promise<void> {
+  public closeConn(): Promise<void> {
     return this.conn.close();
   }
 }

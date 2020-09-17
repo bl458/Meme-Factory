@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { MoreThan } from 'typeorm';
 
 import { DBConnService } from 'src/db/db.conn.service';
@@ -7,6 +7,7 @@ import { UserSession } from 'src/db/entity/UserSession';
 
 const TOKEN_EXPIRY = 1000 * 60 * 60 * 30; // 30 min
 
+@Injectable()
 export class UserGuard implements CanActivate {
   constructor(private conn: DBConnService) {}
 
