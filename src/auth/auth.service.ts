@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { randomBytes, createHash } from 'crypto';
 import { hash, compare } from 'bcrypt';
 
-const TOKEN_BYTES = 256;
+const TOKEN_BYTES = 128;
 const SALT_ROUNDS = 12;
 
 @Injectable()

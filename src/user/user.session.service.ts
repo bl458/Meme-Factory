@@ -19,13 +19,19 @@ export class UserSessionService {
       if (!(await this.auth.comparePw(pw, user.pw)))
         throw new BadRequestException('bad pw');
 
-      const uSession = new UserSession();
+      const prevSession = await mgr.findOne(UserSession, {
+        select: ['id'],
+        where: { user },
+      });
+      if (prevSession) await mgr.remove(prevSession);
+
+      const newSession = new UserSession();
       const token = await this.auth.generateToken();
 
-      uSession.user = user;
-      uSession.token = token;
+      newSession.user = user;
+      newSession.token = token;
 
-      await mgr.save(uSession);
+      await mgr.save(newSession);
 
       return token;
     });
