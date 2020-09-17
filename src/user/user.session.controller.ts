@@ -12,14 +12,14 @@ export class UserSessionController {
 
   @Post('user/session')
   async login(
-    @Body('email', new EmailPipe()) email: string,
-    @Body('pw', new PasswordPipe()) pw: string,
+    @Body('email', EmailPipe) email: string,
+    @Body('pw', PasswordPipe) pw: string,
   ): Promise<string> {
     return await this.usService.doLogin(email, pw);
   }
 
   @Delete('user/session')
-  async logout(@Param('token', new TokenPipe()) token: string): Promise<void> {
+  async logout(@Param('token', TokenPipe) token: string): Promise<void> {
     return await this.usService.doLogout(token);
   }
 }

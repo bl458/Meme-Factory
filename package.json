@@ -9,8 +9,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "run:local": "cross-env NODE_ENV=development LOAD_ENV=YES TYPEORM_ENTITIES=build/db/entity/**/*.js TYPEORM_MIGRATIONS=build/db/migration/**/*.js TYPEORM_SUBSCRIBERS=build/db/subscriber/**/*.js nest start --debug --watch",
-    "migration:generate:local": "npx ts-node ./node_modules/.bin/typeorm migration:generate -n",
-    "migration:run:local": "npx ts-node ./node_modules/.bin/typeorm migration:run"
+    "typeorm:local": "npx ts-node ./node_modules/.bin/typeorm"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",
