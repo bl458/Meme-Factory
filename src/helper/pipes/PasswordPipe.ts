@@ -19,7 +19,7 @@ export class PasswordPipe implements PipeTransform {
     if (!isString(data))
       throw new BadRequestException(`${data} must be a string.`);
 
-    if (data.length < 8)
+    if (data.length > 8)
       throw new BadRequestException(`${data} must be a valid password.`);
 
     return value;
