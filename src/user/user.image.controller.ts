@@ -1,28 +1,28 @@
 import {
-  BadRequestException,
   Controller,
-  Post,
+  UseGuards,
+  Session,
   Req,
   Res,
-  Session,
-  UseGuards,
+  BadRequestException,
+  Post,
 } from '@nestjs/common';
 
-import { UserGuard } from 'src/user/user.guard';
+import { UserGuard } from './user.guard';
 
-import { ImageUploadService } from './image.upload.service';
+import { ImageUploadService } from 'src/image/image.upload.service';
 
 import { UserSession } from 'src/db/entity/UserSession';
 
-const MAX_SIZE = 3 * 1024 * 1024; // 3MB
+const MAX_IMG_SIZE = 3 * 1024 * 1024; // 3MB
 
 @UseGuards(UserGuard)
 @Controller()
-export class ImageUploadController {
-  constructor(private readonly iuService: ImageUploadService) {}
+export class UserImageController {
+  constructor(private iuService: ImageUploadService) {}
 
-  @Post('image/upload')
-  async uploadNewImage(
+  @Post('user/image')
+  async saveNewImage(
     @Session() session: UserSession,
     @Req() request: any,
     @Res() response: any,
@@ -30,7 +30,7 @@ export class ImageUploadController {
     if (!request.headers['content-type'].includes('multipart/form-data'))
       throw new BadRequestException('only multipart/form-data allowed');
 
-    if (request.headers['content-length'] > MAX_SIZE)
+    if (request.headers['content-length'] > MAX_IMG_SIZE)
       throw new BadRequestException('Image too big');
 
     await this.iuService.uploadNew(session, request, response);

@@ -8,9 +8,10 @@ import { UserSessionService } from './user.session.service';
 
 import { AuthModule } from 'src/auth/auth.module';
 import { DBModule } from 'src/db/db.module';
+import { ImageModule } from 'src/image/image.module';
 
 @Module({
-  imports: [AuthModule, DBModule],
+  imports: [AuthModule, DBModule, ImageModule],
   controllers: [UserController, UserSessionController],
   providers: [UserService, UserSessionService],
 })
