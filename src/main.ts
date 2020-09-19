@@ -4,7 +4,9 @@ import * as dotenv from 'dotenv';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  dotenv.config({ path: __dirname + '/.env' });
+
+  if (process.env.LOAD_ENV === 'YES')
+    dotenv.config({ path: __dirname + '/.env' });
 
   await app.listen(3000);
 }
