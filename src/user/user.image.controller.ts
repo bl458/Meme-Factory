@@ -27,13 +27,11 @@ export class UserImageController {
   async saveNewImage(
     @Session() session: UserSession,
     @UploadedFile() file: Express.Multer.File,
-  ): Promise<void> {
-    console.log(file);
-    // if (
-    //   !request.headers['content-type'] ||
-    //   !request.headers['content-type'].includes('multipart/form-data')
-    // )
-    //   throw new BadRequestException('only multipart/form-data allowed');
-    // await this.iuService.uploadNew(session, request, response);
+  ): Promise<string> {
+    if (!file) throw new BadRequestException('no file');
+    if (!file.mimetype.includes('image/'))
+      throw new BadRequestException('file has to be an image');
+
+    return await this.iuService.uploadNewUserImage(session, file);
   }
 }
