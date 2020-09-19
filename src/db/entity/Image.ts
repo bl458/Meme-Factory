@@ -16,6 +16,12 @@ export class Image {
   @Column()
   size: number; // bytes
 
+  @Column()
+  width: number;
+
+  @Column()
+  height: number;
+
   @Column({ nullable: false, unique: true })
   url: string;
 

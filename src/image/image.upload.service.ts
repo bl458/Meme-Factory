@@ -1,16 +1,16 @@
 import {
   NotFoundException,
   Injectable,
-  InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common';
-import * as multer from 'multer';
 import * as AWS from 'aws-sdk';
-import * as multerS3 from 'multer-s3';
+import * as sharp from 'sharp';
 
 import { DBConnService } from 'src/db/db.conn.service';
 
 import { UserSession } from 'src/db/entity/UserSession';
 import { Image } from 'src/db/entity/Image';
+
 import { generateUUID } from 'src/helper/Misc';
 
 const MAX_IMG_SIZE = 3 * 1024 * 1024; // 3MB
@@ -30,17 +30,23 @@ export class ImageUploadService {
   async uploadNewUserImage(
     session: UserSession,
     file: Express.Multer.File,
-  ): Promise<string> {
-    const imageId = await generateUUID();
+  ): Promise<Image> {
+    //Using sharp b/c app might need resizing image in the future
+    const imgSharp = sharp(file.buffer);
+    const imgMetaData = await imgSharp.metadata();
+    if (imgMetaData.size > MAX_IMG_SIZE)
+      throw new BadRequestException('image too big');
+
+    const imgId = await generateUUID();
 
     const params = {
       Body: file.buffer,
       Bucket: process.env.AWS_S3_BUCKET_NAME,
-      Key: `user/${imageId}`,
+      Key: `user/${imgId}`,
       ContentType: file.mimetype,
     };
 
-    const data = await this.s3
+    const imgObj = await this.s3
       .upload(params) // upload callback parameter not working properly
       .promise()
       .catch(err => {
@@ -48,12 +54,18 @@ export class ImageUploadService {
         throw new NotFoundException(err.message);
       });
 
-    console.log(data);
-
-    await this.conn.getConn().transaction(async mgr => {
+    return await this.conn.getConn().transaction(async mgr => {
       const image = new Image();
-    });
 
-    return imageId;
+      image.size = imgMetaData.size;
+      image.width = imgMetaData.width;
+      image.height = imgMetaData.height;
+      image.url = imgObj.Location; // Location contains imgId variable
+      image.user = session.user;
+
+      await mgr.save(image);
+
+      return image;
+    });
   }
 }
