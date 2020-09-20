@@ -1,5 +1,5 @@
 import { createInterface } from 'readline';
-import { createConnection } from 'typeorm';
+import { createConnection, QueryFailedError } from 'typeorm';
 import validator from 'validator';
 
 import { AdminUser } from '../db/entity/AdminUser';
@@ -59,19 +59,24 @@ const question = (q: string): Promise<string> => {
     break;
   }
 
+  const admin = new AdminUser();
+  const conn = await createConnection();
+
+  admin.email = email;
+  admin.pw = await new AuthService().hashPw(pw);
+
   try {
-    const admin = new AdminUser();
-    const conn = await createConnection();
-
-    admin.email = email;
-    admin.pw = await new AuthService().hashPw(pw);
-
     await conn.createEntityManager().save(admin);
 
     console.log('\nSuccessfully created admin user!');
-    RL.close();
   } catch (err) {
-    console.log('\nFailed to create admin:', err);
+    if (err instanceof QueryFailedError) {
+      console.log('Admin email already exists.');
+    } else {
+      console.log('\nFailed to create admin:', err);
+    }
+  } finally {
+    conn.close();
     RL.close();
   }
 })();
