@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   ManyToOne,
 } from 'typeorm';
+import { AdminUser } from './AdminUser';
 
 import { User } from './User';
 
@@ -30,6 +31,12 @@ export class Image {
     user => user.images,
   )
   user: User;
+
+  @ManyToOne(
+    () => AdminUser,
+    user => user.id,
+  )
+  admin: AdminUser;
 
   @CreateDateColumn()
   createdAt: Date;

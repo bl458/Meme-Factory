@@ -9,7 +9,9 @@ import * as sharp from 'sharp';
 import { DBConnService } from 'src/db/db.conn.service';
 
 import { UserSession } from 'src/db/entity/UserSession';
+import { AdminUserSession } from 'src/db/entity/AdminUserSession';
 import { Image } from 'src/db/entity/Image';
+import { User } from 'src/db/entity/User';
 
 import { generateUUID } from 'src/helper/Misc';
 
@@ -27,8 +29,8 @@ export class ImageUploadService {
     });
   }
 
-  async uploadNewUserImage(
-    session: UserSession,
+  async uploadNewImage(
+    session: UserSession | AdminUserSession,
     file: Express.Multer.File,
   ): Promise<Image> {
     //Using sharp b/c app might need resizing image in the future
@@ -61,7 +63,11 @@ export class ImageUploadService {
       image.width = imgMetaData.width;
       image.height = imgMetaData.height;
       image.url = imgObj.Location; // Location contains imgId variable
-      image.user = session.user;
+      if (session.user instanceof User) {
+        image.user = session.user;
+      } else {
+        image.admin = session.user;
+      }
 
       await mgr.save(image);
 

@@ -31,6 +31,6 @@ export class UserImageController {
     if (!file.mimetype.includes('image/'))
       throw new BadRequestException('file has to be an image');
 
-    return await this.iuService.uploadNewUserImage(session, file);
+    return await this.iuService.uploadNewImage(session, file);
   }
 }
