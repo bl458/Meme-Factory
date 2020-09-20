@@ -8,7 +8,8 @@ import { DBConnService } from './db.conn.service';
   providers: [
     {
       provide: DBConnService,
-      useFactory: async () => new DBConnService(await createConnection()),
+      useFactory: async (): Promise<DBConnService> =>
+        new DBConnService(await createConnection()),
     },
   ],
   exports: [DBConnService],

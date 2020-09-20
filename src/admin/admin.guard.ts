@@ -1,8 +1,12 @@
-import { CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { MoreThan } from 'typeorm';
 
 import { DBConnService } from 'src/db/db.conn.service';
 import { AdminUserSession } from 'src/db/entity/AdminUserSession';
 
+const TOKEN_EXPIRY = 1000 * 60 * 60 * 30;
+
+@Injectable()
 export class AdminGuard implements CanActivate {
   constructor(private conn: DBConnService) {}
 
@@ -14,7 +18,7 @@ export class AdminGuard implements CanActivate {
 
     const session = await this.conn.getConn().transaction(async mgr => {
       return await mgr.findOne(AdminUserSession, {
-        where: { token },
+        where: { token, createdAt: MoreThan(Date.now() - TOKEN_EXPIRY) },
         relations: ['user'],
       });
     });
