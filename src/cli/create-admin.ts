@@ -68,10 +68,10 @@ const question = (q: string): Promise<string> => {
 
     await conn.createEntityManager().save(admin);
 
-    console.log('Successfully created admin user!');
+    console.log('\nSuccessfully created admin user!');
     RL.close();
   } catch (err) {
-    console.log('Failed to create admin:', err);
+    console.log('\nFailed to create admin:', err);
     RL.close();
   }
 })();

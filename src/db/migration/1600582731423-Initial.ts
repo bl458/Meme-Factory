@@ -1,11 +1,11 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class Initial1600578307459 implements MigrationInterface {
-    name = 'Initial1600578307459'
+export class Initial1600582731423 implements MigrationInterface {
+    name = 'Initial1600582731423'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query("CREATE TABLE `admin_user` (`id` int NOT NULL AUTO_INCREMENT, `email` varchar(255) NOT NULL, `pw` varchar(255) NOT NULL, `createdAt` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), PRIMARY KEY (`id`)) ENGINE=InnoDB");
-        await queryRunner.query("CREATE TABLE `admin_user_session` (`id` int NOT NULL AUTO_INCREMENT, `token` varchar(255) NOT NULL, `createdAt` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `userId` int NULL, UNIQUE INDEX `REL_48820c1934b86458b187bbb721` (`userId`), PRIMARY KEY (`id`)) ENGINE=InnoDB");
+        await queryRunner.query("CREATE TABLE `admin_user` (`id` int NOT NULL AUTO_INCREMENT, `email` varchar(255) NOT NULL, `pw` varchar(255) NOT NULL, `createdAt` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), UNIQUE INDEX `IDX_840ac5cd67be99efa5cd989bf9` (`email`), PRIMARY KEY (`id`)) ENGINE=InnoDB");
+        await queryRunner.query("CREATE TABLE `admin_user_session` (`id` int NOT NULL AUTO_INCREMENT, `token` varchar(256) NOT NULL, `createdAt` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `userId` int NULL, UNIQUE INDEX `REL_48820c1934b86458b187bbb721` (`userId`), PRIMARY KEY (`id`)) ENGINE=InnoDB");
         await queryRunner.query("CREATE TABLE `user` (`id` int NOT NULL AUTO_INCREMENT, `email` varchar(255) NOT NULL, `pw` varchar(255) NOT NULL, `createdAt` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), UNIQUE INDEX `IDX_e12875dfb3b1d92d7d7c5377e2` (`email`), PRIMARY KEY (`id`)) ENGINE=InnoDB");
         await queryRunner.query("CREATE TABLE `image` (`id` int NOT NULL AUTO_INCREMENT, `size` int NOT NULL, `width` int NOT NULL, `height` int NOT NULL, `url` varchar(255) NOT NULL, `createdAt` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `userId` int NULL, UNIQUE INDEX `IDX_602959dc3010ff4b4805ee7f10` (`url`), PRIMARY KEY (`id`)) ENGINE=InnoDB");
         await queryRunner.query("CREATE TABLE `user_session` (`id` int NOT NULL AUTO_INCREMENT, `token` varchar(256) NOT NULL, `createdAt` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `userId` int NULL, UNIQUE INDEX `REL_b5eb7aa08382591e7c2d1244fe` (`userId`), PRIMARY KEY (`id`)) ENGINE=InnoDB");
@@ -26,6 +26,7 @@ export class Initial1600578307459 implements MigrationInterface {
         await queryRunner.query("DROP TABLE `user`");
         await queryRunner.query("DROP INDEX `REL_48820c1934b86458b187bbb721` ON `admin_user_session`");
         await queryRunner.query("DROP TABLE `admin_user_session`");
+        await queryRunner.query("DROP INDEX `IDX_840ac5cd67be99efa5cd989bf9` ON `admin_user`");
         await queryRunner.query("DROP TABLE `admin_user`");
     }
 
