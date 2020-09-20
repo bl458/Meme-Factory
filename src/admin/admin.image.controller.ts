@@ -33,7 +33,7 @@ export class AdminImageController {
     for (let i = 0; i < files.length; i++) {
       console.log(`Uploading ${i}th file`);
       if (!files[0].mimetype.includes('image/'))
-        throw new BadRequestException(`${i}th file has to be an image`);
+        throw new BadRequestException(`${i}th file is not an image`);
 
       const newImage = await this.iuService.uploadNewImage(session, files[i]);
 
