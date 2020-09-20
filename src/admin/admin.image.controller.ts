@@ -31,7 +31,8 @@ export class AdminImageController {
     let result = [];
 
     for (let i = 0; i < files.length; i++) {
-      console.log(`Uploading ${i}th file`);
+      console.log(`\nUploading ${i}th file ${files[i].originalname}\n`);
+
       if (!files[0].mimetype.includes('image/'))
         throw new BadRequestException(`${i}th file is not an image`);
 

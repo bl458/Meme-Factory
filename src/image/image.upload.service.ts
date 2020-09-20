@@ -15,7 +15,7 @@ import { User } from 'src/db/entity/User';
 
 import { generateUUID } from 'src/helper/Misc';
 
-const MAX_IMG_SIZE = 3 * 1024 * 1024; // 3MB
+const MAX_IMG_SIZE = 8 * 1024 * 1024; // 8MB
 
 @Injectable()
 export class ImageUploadService {
