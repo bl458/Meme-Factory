@@ -14,7 +14,7 @@ export class UserSession {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false, length: 256 })
+  @Column({ length: 256 })
   token: string;
 
   @OneToOne(() => User)

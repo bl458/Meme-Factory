@@ -14,7 +14,7 @@ export class AdminUserSession {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ length: 256 })
   token: string;
 
   @OneToOne(() => AdminUser)
