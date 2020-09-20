@@ -41,10 +41,14 @@ export class ImageUploadService {
 
     const imgId = await generateUUID();
 
+    // key is location of img in aws s3
+    const key =
+      session instanceof UserSession ? `user/${imgId}` : `admin/${imgId}`;
+
     const params = {
       Body: file.buffer,
       Bucket: process.env.AWS_S3_BUCKET_NAME,
-      Key: `user/${imgId}`,
+      Key: key,
       ContentType: file.mimetype,
     };
 
@@ -59,10 +63,12 @@ export class ImageUploadService {
     return await this.conn.getConn().transaction(async mgr => {
       const image = new Image();
 
+      image.name = file.originalname;
       image.size = imgMetaData.size;
       image.width = imgMetaData.width;
       image.height = imgMetaData.height;
       image.url = imgObj.Location; // Location contains imgId variable
+
       if (session.user instanceof User) {
         image.user = session.user;
       } else {

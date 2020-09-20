@@ -15,6 +15,9 @@ export class Image {
   id: number;
 
   @Column()
+  name: string;
+
+  @Column()
   size: number; // bytes
 
   @Column()
