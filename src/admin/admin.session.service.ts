@@ -16,7 +16,7 @@ export class AdminSessionService {
       const user = await mgr.findOne(AdminUser, { email });
 
       if (!user) throw new BadRequestException('bad admin email');
-      if (await this.auth.comparePw(pw, user.pw))
+      if (!(await this.auth.comparePw(pw, user.pw)))
         throw new BadRequestException('bad admin pw');
 
       const prevSession = await mgr.findOne(AdminUserSession, {
