@@ -35,7 +35,7 @@ export class AdminImageService {
 
     console.log(`Uploaded ${result.length} images!\n`);
 
-    if (failed.length > 1)
+    if (failed.length >= 1)
       console.log(`Failed to upload ${failed.length} files: \n${failed}`);
 
     return result;
