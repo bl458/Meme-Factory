@@ -18,7 +18,7 @@ export class AdminImageService {
 
     for (let i = 0; i < files.length; i++) {
       if (!files[0].mimetype.includes('image/'))
-        throw new BadRequestException(`${i}th file is not an image`);
+        throw new BadRequestException(`file[${i}] is not an image`);
 
       try {
         const newImage = await this.iuService.uploadNewImage(session, files[i]);
@@ -28,11 +28,15 @@ export class AdminImageService {
         );
       } catch (err) {
         console.log(`\nFailed to upload file[${i}] ${files[i].originalname}\n`);
-        failed = [...failed, `${i}th file ${files[i].originalname}: ${err}`];
+        failed = [...failed, `file[${i}] ${files[i].originalname}: ${err}`];
+        continue;
       }
     }
 
-    if (failed.length > 1) console.log(failed);
+    console.log(`Uploaded ${result.length} images!\n`);
+
+    if (failed.length > 1)
+      console.log(`Failed to upload ${failed.length} files: \n${failed}`);
 
     return result;
   }
