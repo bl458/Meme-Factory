@@ -17,6 +17,7 @@ import { generateUUID } from 'src/helper/Misc';
 
 const MAX_IMG_SIZE = 8 * 1024 * 1024; // 8MB
 const PAGE_SIZE = 30; // Num of images frontend can fetch each api call
+const CACHE_DURATION = 3600000; // Image data remains in cache for 1 hour
 
 @Injectable()
 export class ImageService {
@@ -33,7 +34,7 @@ export class ImageService {
   // No need to worry about page value too big (page >= 1)
   async fetchImagesFeed(seed: number, page: number): Promise<Image[]> {
     return await this.conn.getConn().transaction(async mgr => {
-      return await mgr
+      const unprocessedData = await mgr
         .createQueryBuilder(Image, 'image')
         .select(['image.id', 'image.name', 'image.url', 'image.createdAt'])
         // UNIX_TIMESTAMP(DATE) converts date to seconds from 1970-01-01, 3days = 259200sec
@@ -42,11 +43,13 @@ export class ImageService {
           `UNIX_TIMESTAMP(image.createdAt) + rand(${seed}) * 259200`,
           'DESC',
         )
-        .limit(PAGE_SIZE)
-        // If offset > num_of_rows_in_Image, query returns empty
-        .offset((page - 1) * PAGE_SIZE)
-        .cache(true)
+        .cache(CACHE_DURATION)
         .getMany();
+
+      return unprocessedData.slice(
+        (page - 1) * PAGE_SIZE,
+        (page - 1) * PAGE_SIZE + PAGE_SIZE,
+      );
     });
   }
 
