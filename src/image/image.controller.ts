@@ -15,8 +15,8 @@ export class ImageController {
   // Same seed means same query result
   async getImagesFeed(
     @Param('seed', new IntegerPipe()) seed: number,
-    @Param('page', new IntegerPipe(1)) page: number,
+    @Param('page', new IntegerPipe(1)) pageNo: number,
   ): Promise<Image[]> {
-    return await this.iService.fetchImagesFeed(seed, page);
+    return await this.iService.fetchImagesFeed(seed, pageNo);
   }
 }

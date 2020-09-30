@@ -16,7 +16,7 @@ import { User } from 'src/db/entity/User';
 import { generateUUID } from 'src/helper/Misc';
 
 const MAX_IMG_SIZE = 8 * 1024 * 1024; // 8MB
-const PAGE_SIZE = 30; // Num of images frontend can fetch each api call
+const PAGE_SIZE = 2; // Num of images frontend can fetch each api call
 const CACHE_DURATION = 3600000; // Image data remains in cache for 1 hour
 
 @Injectable()
@@ -32,7 +32,7 @@ export class ImageService {
   }
 
   // No need to worry about page value too big (page >= 1)
-  async fetchImagesFeed(seed: number, page: number): Promise<Image[]> {
+  async fetchImagesFeed(seed: number, pageNo: number): Promise<Image[]> {
     return await this.conn.getConn().transaction(async mgr => {
       const unprocessedData = await mgr
         .createQueryBuilder(Image, 'image')
@@ -47,8 +47,8 @@ export class ImageService {
         .getMany();
 
       return unprocessedData.slice(
-        (page - 1) * PAGE_SIZE,
-        (page - 1) * PAGE_SIZE + PAGE_SIZE,
+        (pageNo - 1) * PAGE_SIZE,
+        (pageNo - 1) * PAGE_SIZE + PAGE_SIZE,
       );
     });
   }
