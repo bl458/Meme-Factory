@@ -15,6 +15,6 @@ export class ImageController {
     @Param('seed') seed: number,
     @Param('page') page: number,
   ): Promise<Image[]> {
-    return await this.iService.fetchImagesInFeed(seed, page);
+    return await this.iService.fetchImagesFeed(seed, page);
   }
 }

@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class Initial1600606433184 implements MigrationInterface {
-    name = 'Initial1600606433184'
+export class Intial1601455201402 implements MigrationInterface {
+    name = 'Intial1601455201402'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query("CREATE TABLE `admin_user` (`id` int NOT NULL AUTO_INCREMENT, `email` varchar(255) NOT NULL, `pw` varchar(255) NOT NULL, `createdAt` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), UNIQUE INDEX `IDX_840ac5cd67be99efa5cd989bf9` (`email`), PRIMARY KEY (`id`)) ENGINE=InnoDB");
@@ -13,9 +13,11 @@ export class Initial1600606433184 implements MigrationInterface {
         await queryRunner.query("ALTER TABLE `image` ADD CONSTRAINT `FK_dc40417dfa0c7fbd70b8eb880cc` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION");
         await queryRunner.query("ALTER TABLE `image` ADD CONSTRAINT `FK_f98e3f05c5741d928a6cfe89331` FOREIGN KEY (`adminId`) REFERENCES `admin_user`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION");
         await queryRunner.query("ALTER TABLE `user_session` ADD CONSTRAINT `FK_b5eb7aa08382591e7c2d1244fe5` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+        await queryRunner.query("CREATE TABLE `memeFactory`.`query-result-cache` (`id` int NOT NULL AUTO_INCREMENT, `identifier` varchar(255) NULL, `time` bigint NOT NULL, `duration` int NOT NULL, `query` text NOT NULL, `result` text NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB");
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query("DROP TABLE `memeFactory`.`query-result-cache`");
         await queryRunner.query("ALTER TABLE `user_session` DROP FOREIGN KEY `FK_b5eb7aa08382591e7c2d1244fe5`");
         await queryRunner.query("ALTER TABLE `image` DROP FOREIGN KEY `FK_f98e3f05c5741d928a6cfe89331`");
         await queryRunner.query("ALTER TABLE `image` DROP FOREIGN KEY `FK_dc40417dfa0c7fbd70b8eb880cc`");
