@@ -16,6 +16,7 @@ import { User } from 'src/db/entity/User';
 import { generateUUID } from 'src/helper/Misc';
 
 const MAX_IMG_SIZE = 8 * 1024 * 1024; // 8MB
+const PAGE_SIZE = 30; // Num of images frontend can fetch each api call
 
 @Injectable()
 export class ImageService {
@@ -29,9 +30,23 @@ export class ImageService {
     });
   }
 
-  async fetchAllImages(): Promise<Image[]> {
+  async fetchImagesInFeed(seed: number, page: number): Promise<Image[]> {
+    // No need to worry about page value too big (page >= 1)
+
     return await this.conn.getConn().transaction(async mgr => {
-      return await mgr.find(Image, {});
+      return await mgr
+        .createQueryBuilder(Image, 'image')
+        .select(['image.id', 'image.name', 'image.url', 'image.createdAt'])
+        // UNIX_TIMESTAMP(DATE) converts date to seconds from 1970-01-01, 3days = 259200sec
+        // Images in semi-random order. Recently created have higher chance of being on top of feed
+        .orderBy(
+          `UNIX_TIMESTAMP(image.createdAt) + rand(${seed}) * 259200`,
+          'DESC',
+        )
+        .limit(PAGE_SIZE)
+        // If offset > num_of_rows_in_Image, query returns empty
+        .offset((page - 1) * PAGE_SIZE)
+        .getMany();
     });
   }
 
