@@ -18,7 +18,7 @@ import { generateUUID } from 'src/helper/Misc';
 const MAX_IMG_SIZE = 8 * 1024 * 1024; // 8MB
 
 @Injectable()
-export class ImageUploadService {
+export class ImageService {
   private s3: AWS.S3;
 
   constructor(private conn: DBConnService) {
@@ -26,6 +26,16 @@ export class ImageUploadService {
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.AWS_SECRET_KEY_ID,
       region: process.env.AWS_REGION,
+    });
+  }
+
+  async fetchAllImages(): Promise<Image[]> {
+    return await this.conn.getConn().transaction(async mgr => {
+      return await mgr
+        .createQueryBuilder()
+        .select()
+        .from(Image, 'image')
+        .getMany();
     });
   }
 

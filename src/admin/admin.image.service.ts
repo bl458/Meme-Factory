@@ -1,13 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { ImageUploadService } from 'src/image/image.upload.service';
+import { ImageService } from 'src/image/image.service';
 
 import { AdminUserSession } from 'src/db/entity/AdminUserSession';
 import { Image } from 'src/db/entity/Image';
 
 @Injectable()
 export class AdminImageService {
-  constructor(private iuService: ImageUploadService) {}
+  constructor(private iService: ImageService) {}
 
   async uploadAdminImages(
     session: AdminUserSession,
@@ -21,7 +21,7 @@ export class AdminImageService {
         throw new BadRequestException(`file[${i}] is not an image`);
 
       try {
-        const newImage = await this.iuService.uploadNewImage(session, files[i]);
+        const newImage = await this.iService.uploadNewImage(session, files[i]);
         result = [...result, newImage];
         console.log(
           `\nUploaded file[${i}] ${files[i].originalname}\n${newImage.url}\n`,

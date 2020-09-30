@@ -11,7 +11,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 import { UserGuard } from './user.guard';
 
-import { ImageUploadService } from 'src/image/image.upload.service';
+import { ImageService } from 'src/image/image.service';
 
 import { UserSession } from 'src/db/entity/UserSession';
 import { Image } from 'src/db/entity/Image';
@@ -19,7 +19,7 @@ import { Image } from 'src/db/entity/Image';
 @UseGuards(UserGuard)
 @Controller()
 export class UserImageController {
-  constructor(private iuService: ImageUploadService) {}
+  constructor(private iService: ImageService) {}
 
   @Post('user/image')
   @UseInterceptors(FileInterceptor('file'))
@@ -31,6 +31,6 @@ export class UserImageController {
     if (!file.mimetype.includes('image/'))
       throw new BadRequestException('file has to be an image');
 
-    return await this.iuService.uploadNewImage(session, file);
+    return await this.iService.uploadNewImage(session, file);
   }
 }
