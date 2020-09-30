@@ -31,11 +31,7 @@ export class ImageService {
 
   async fetchAllImages(): Promise<Image[]> {
     return await this.conn.getConn().transaction(async mgr => {
-      return await mgr
-        .createQueryBuilder()
-        .select()
-        .from(Image, 'image')
-        .getMany();
+      return await mgr.find(Image, {});
     });
   }
 
