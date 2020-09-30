@@ -4,12 +4,10 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 
-import { isString } from 'util';
-
 import validator from 'validator';
 
 export class EmailPipe implements PipeTransform {
-  transform(value: any, { data, metatype }: ArgumentMetadata): any {
+  transform(value: any, { data, metatype }: ArgumentMetadata): string {
     if (value === undefined)
       throw new BadRequestException(`${data} is required.`);
 
@@ -18,7 +16,7 @@ export class EmailPipe implements PipeTransform {
         `${data} has wrong type. Expected ${String} but got ${metatype}.`,
       );
 
-    if (!isString(value))
+    if (typeof value !== 'string')
       throw new BadRequestException(`${data} must be a string.`);
 
     if (!validator.isEmail(value))

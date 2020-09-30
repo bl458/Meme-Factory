@@ -5,12 +5,11 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 
-import { isString } from 'util';
 import validator from 'validator';
 
 @Injectable()
 export class TokenPipe implements PipeTransform {
-  transform(value: any, { data, metatype }: ArgumentMetadata): any {
+  transform(value: any, { data, metatype }: ArgumentMetadata): string {
     if (value === undefined)
       throw new BadRequestException(`${data} is required.`);
 
@@ -19,7 +18,7 @@ export class TokenPipe implements PipeTransform {
         `${data} has wrong type; ${String} expected, got ${metatype}`,
       );
 
-    if (!isString(value))
+    if (typeof value !== 'string')
       throw new BadRequestException(`${data} must be a string.`);
 
     if (!validator.isAlphanumeric(value))

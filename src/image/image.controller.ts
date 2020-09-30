@@ -1,7 +1,9 @@
-import { Controller, Param } from '@nestjs/common';
-import { Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
+import { Get, Param } from '@nestjs/common';
 
 import { ImageService } from './image.service';
+
+import { IntegerPipe } from 'src/helper/pipes/IntegerPipe';
 
 import { Image } from 'src/db/entity/Image';
 
@@ -12,8 +14,8 @@ export class ImageController {
   @Get('images/feed/:seed/:page')
   // Same seed means same query result
   async getImagesFeed(
-    @Param('seed') seed: number,
-    @Param('page') page: number,
+    @Param('seed', new IntegerPipe()) seed: number,
+    @Param('page', new IntegerPipe(1)) page: number,
   ): Promise<Image[]> {
     return await this.iService.fetchImagesFeed(seed, page);
   }

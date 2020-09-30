@@ -4,10 +4,8 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 
-import { isString } from 'util';
-
 export class PasswordPipe implements PipeTransform {
-  transform(value: any, { data, metatype }: ArgumentMetadata) {
+  transform(value: any, { data, metatype }: ArgumentMetadata): string {
     if (value === undefined)
       throw new BadRequestException(`${data} is required.`);
 
@@ -16,7 +14,7 @@ export class PasswordPipe implements PipeTransform {
         `${data} has wrong type. Expected ${String} but got ${metatype}.`,
       );
 
-    if (!isString(data))
+    if (typeof value !== 'string')
       throw new BadRequestException(`${data} must be a string.`);
 
     if (data.length > 8)
