@@ -16,7 +16,7 @@ import { User } from 'src/db/entity/User';
 import { generateUUID } from 'src/helper/Misc';
 
 const MAX_IMG_SIZE = 8 * 1024 * 1024; // 8MB
-const PAGE_SIZE = 2; // Num of images frontend can fetch each api call
+const PAGE_SIZE = 30; // Num of images frontend can fetch each api call
 const CACHE_DURATION = 3600000; // Image data remains in cache for 1 hour
 
 @Injectable()
