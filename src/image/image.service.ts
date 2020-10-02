@@ -92,6 +92,7 @@ export class ImageService {
       image.width = imgMetaData.width;
       image.height = imgMetaData.height;
       image.url = imgObj.Location; // Location contains imgId variable
+      image.hash = await this.encodeImageToBlurhash(imgSharp);
 
       if (session.user instanceof User) {
         image.user = session.user;

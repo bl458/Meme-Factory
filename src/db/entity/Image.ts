@@ -29,6 +29,9 @@ export class Image {
   @Column({ nullable: false, unique: true })
   url: string;
 
+  @Column()
+  hash: string;
+
   @ManyToOne(
     () => User,
     user => user.images,
