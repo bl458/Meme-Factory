@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import * as AWS from 'aws-sdk';
 import * as sharp from 'sharp';
+import { encode } from 'blurhash';
 
 import { DBConnService } from 'src/db/db.conn.service';
 
@@ -31,7 +32,6 @@ export class ImageService {
     });
   }
 
-  // No need to worry about page value too big (page >= 1)
   async fetchImagesFeed(seed: number, pageNo: number): Promise<Image[]> {
     return await this.conn.getConn().transaction(async mgr => {
       const unprocessedData = await mgr
@@ -102,6 +102,19 @@ export class ImageService {
       await mgr.save(image);
 
       return image;
+    });
+  }
+
+  encodeImageToBlurhash(imgSharp: sharp.Sharp): Promise<string> {
+    return new Promise((resolve, reject) => {
+      imgSharp
+        .raw()
+        .ensureAlpha()
+        .resize(32, 32, { fit: 'inside' })
+        .toBuffer((err, buffer, { width, height }) => {
+          if (err) return reject(err);
+          resolve(encode(new Uint8ClampedArray(buffer), width, height, 4, 4));
+        });
     });
   }
 }
