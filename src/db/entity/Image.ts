@@ -30,7 +30,7 @@ export class Image {
   url: string;
 
   @Column()
-  hash: string;
+  blurPlaceholder: string;
 
   @ManyToOne(
     () => User,

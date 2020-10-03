@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import * as AWS from 'aws-sdk';
 import * as sharp from 'sharp';
-import { encode } from 'blurhash';
+import { encode, decode } from 'blurhash';
 
 import { DBConnService } from 'src/db/db.conn.service';
 
@@ -15,6 +15,7 @@ import { Image } from 'src/db/entity/Image';
 import { User } from 'src/db/entity/User';
 
 import { generateUUID } from 'src/helper/Misc';
+import { createCanvas } from 'canvas';
 
 const MAX_IMG_SIZE = 8 * 1024 * 1024; // 8MB
 const PAGE_SIZE = 30; // Num of images frontend can fetch each api call
@@ -92,7 +93,9 @@ export class ImageService {
       image.width = imgMetaData.width;
       image.height = imgMetaData.height;
       image.url = imgObj.Location; // Location contains imgId variable
-      image.hash = await this.encodeImageToBlurhash(imgSharp);
+
+      const blurHash = await this.encodeImageToBlurhash(imgSharp);
+      image.blurPlaceholder = await this.blurHashToSrc(blurHash);
 
       if (session.user instanceof User) {
         image.user = session.user;
@@ -117,6 +120,28 @@ export class ImageService {
 
           resolve(encode(new Uint8ClampedArray(buffer), width, height, 4, 4));
         });
+    });
+  }
+
+  blurHashToSrc(blurHash: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      try {
+        const pixels = decode(blurHash, 16, 16);
+
+        const canvas = createCanvas(16, 16);
+        const ctx = canvas.getContext('2d');
+        const imgData = ctx.createImageData(16, 16);
+
+        for (let i = 0; i < 16 * 16 * 4; i++) {
+          imgData.data[i] = pixels[i];
+        }
+
+        ctx.putImageData(imgData, 0, 0);
+
+        resolve(canvas.toDataURL());
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 }
