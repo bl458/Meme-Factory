@@ -10,7 +10,8 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "run:local": "cross-env NODE_ENV=development LOAD_ENV=YES nest start --debug --watch",
     "typeorm:local": "npx ts-node ./node_modules/.bin/typeorm",
-    "cli:create-admin:local": "ts-node ./src/cli/create-admin"
+    "cli:create-admin:local": "ts-node ./src/cli/create-admin",
+    "run:remote:prod": "cross-env NODE_ENV=production node build/main"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",
