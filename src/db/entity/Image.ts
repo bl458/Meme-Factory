@@ -29,7 +29,7 @@ export class Image {
   @Column({ nullable: false, unique: true })
   url: string;
 
-  @Column()
+  @Column({ type: 'longtext' })
   blurPlaceholder: string;
 
   @ManyToOne(

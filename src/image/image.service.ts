@@ -37,7 +37,13 @@ export class ImageService {
     return await this.conn.getConn().transaction(async mgr => {
       const unprocessedData = await mgr
         .createQueryBuilder(Image, 'image')
-        .select(['image.id', 'image.url', 'image.createdAt', 'image.hash'])
+        .select([
+          'image.id',
+          'image.name',
+          'image.url',
+          'image.createdAt',
+          'image.blurPlaceholder',
+        ])
         // UNIX_TIMESTAMP(DATE) converts date to seconds from 1970-01-01, 3days = 259200sec
         // Images in semi-random order. Recently added images have higher chance of being on top of feed
         .orderBy(

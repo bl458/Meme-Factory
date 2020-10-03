@@ -8,7 +8,7 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "run:local": "cross-env NODE_ENV=development LOAD_ENV=YES TYPEORM_ENTITIES=build/db/entity/*.js TYPEORM_MIGRATIONS=build/db/migration/*.js TYPEORM_SUBSCRIBERS=build/db/subscriber/*.js nest start --debug --watch",
+    "run:local": "cross-env NODE_ENV=development LOAD_ENV=YES nest start --debug --watch",
     "typeorm:local": "npx ts-node ./node_modules/.bin/typeorm",
     "cli:create-admin:local": "ts-node ./src/cli/create-admin"
   },
@@ -28,6 +28,7 @@
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
     "mysql2": "^2.1.0",
+    "redis": "^3.0.2",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
     "sharp": "^0.26.0",
