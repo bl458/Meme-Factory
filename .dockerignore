@@ -1,3 +1,13 @@
-node_modules
-build
+# Files
 .env
+.eslintrc.js
+.gitignore
+.prettierrc
+README.md
+tsconfig.build.json
+tsconfig.json
+
+# Folders
+node_modules
+src
+test
