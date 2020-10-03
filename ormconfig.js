@@ -1,6 +1,13 @@
 module.exports =
-  process.env.NODE_ENV === 'development'
-    ? {}
+  process.env.NODE_ENV === 'production'
+    ? {
+        type: 'mysql',
+        host: 'mysql',
+        port: '3306',
+        username: 'test',
+        password: 'test',
+        database: 'memeFactory',
+      }
     : {
         type: process.env.CONNECTION,
         host: process.env.HOST,

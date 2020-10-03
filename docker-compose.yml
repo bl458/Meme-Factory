@@ -1,0 +1,28 @@
+version: '3'
+services:
+  redis:
+    image: redis
+    networks:
+      - webnet
+  mysql:
+    image: 'mysql:5.7.24'
+    container_name: 'typeorm-mysql'
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: 'admin'
+      MYSQL_USER: 'test'
+      MYSQL_PASSWORD: 'test'
+      MYSQL_DATABASE: 'memeFactory'
+  web:
+    image: bclim1/meme-factory-backend
+    ports:
+      - '8000:8000'
+    networks:
+      - webnet
+    environment:
+      DB_HOST: mysql
+      REDIS_HOST: redis
+    command: ['./wait-for-it.sh', 'mysql:5432', '--', 'node', 'app.js']
+networks:
+  webnet:
