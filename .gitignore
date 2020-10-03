@@ -36,3 +36,4 @@ lerna-debug.log*
 # Settings
 .env
 ormconfig.js
+.dockerignore
