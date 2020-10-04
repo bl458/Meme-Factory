@@ -2,11 +2,20 @@ module.exports =
   process.env.NODE_ENV === 'production'
     ? {
         type: 'mysql',
-        host: 'mysql',
+        host: 'localhost',
         port: '3306',
         username: 'test',
         password: 'test',
         database: 'memeFactory',
+        synchronize: false,
+        entities: ['build/db/entity/*.js'],
+        migrations: ['build/db/migration/*.js'],
+        subscribers: ['build/db/subscriber/*.js'],
+        cli: {
+          entitiesDir: 'build/db/entity',
+          migrationsDir: 'build/db/migratio',
+          subscribersDir: 'build/db/subscriber',
+        },
       }
     : {
         type: process.env.CONNECTION,
